@@ -15,4 +15,6 @@ licenses:
       - android-sdk-license-.+
 
 script:
-  ./gradlew clean build
+       - ./gradlew clean
+       - ./gradlew assembleDebug
+       - ./gradlew assembleDebugAndroidTest
