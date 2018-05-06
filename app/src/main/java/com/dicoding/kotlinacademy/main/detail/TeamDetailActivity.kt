@@ -16,7 +16,7 @@ import android.widget.TextView
 import com.dicoding.kotlinacademy.R.color.*
 import com.dicoding.kotlinacademy.R.drawable.ic_add_favorites
 import com.dicoding.kotlinacademy.R.drawable.ic_added_favorites
-import com.dicoding.kotlinacademy.R.id.add_to_favorite
+import com.dicoding.kotlinacademy.R.id.add_favorites
 import com.dicoding.kotlinacademy.R.menu.detail_menu
 import com.dicoding.kotlinacademy.api.ApiRepository
 import com.dicoding.kotlinacademy.main.database.Favorite
@@ -149,7 +149,7 @@ class TeamDetailActivity: AppCompatActivity(),TeamDetailView{
                 finish()
                 true
             }
-            add_to_favorite ->{
+            add_favorites ->{
                 if (isFavorite)removeFromFavorite()else addToFavorite()
 
                 isFavorite = !isFavorite

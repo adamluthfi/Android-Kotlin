@@ -4,27 +4,32 @@ import com.dicoding.kotlinacademy.api.ApiRepository
 import com.dicoding.kotlinacademy.api.TheSportDBApi
 import com.dicoding.kotlinacademy.model.TeamResponse
 import com.google.gson.Gson
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import org.jetbrains.anko.coroutines.experimental.bg
+import kotlin.coroutines.experimental.CoroutineContext
 
 class TeamsPresenter(private val view: TeamsView,
                      private val apiRepository: ApiRepository,
-                     private val gson: Gson) {
+                     private val gson: Gson,val context: CoroutineContextProvider = CoroutineContextProvider()) {
 
     fun getTeamList(league: String?) {
         view.showLoading()
-        doAsync {
-            val data = gson.fromJson(apiRepository
-                    .doRequest(TheSportDBApi.getTeams(league)),
-                    TeamResponse::class.java
-            )
-
-            uiThread {
-                view.hideLoading()
-                view.showTeamList(data.teams)
+        async(context.main) {
+            val data =  bg {
+                gson.fromJson(apiRepository
+                        .doRequest(TheSportDBApi.getTeams(league)),
+                        TeamResponse::class.java
+                )
             }
+            view.showTeamList(data.await().teams)
+            view.hideLoading()
         }
     }
 
+}
+
+open class CoroutineContextProvider{
+    open val main : CoroutineContext by lazy { UI }
 }
 
